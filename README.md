@@ -4,10 +4,10 @@
 - **Migrator** — отдельное консольное приложение, накатывает миграции на две БД (`users_db`, `finance_db`).
 - **CurrencyFetcher** — фоновый `BackgroundService`, периодически тянет курсы с `cbr.ru` и сохраняет в `finance_db`.
 - **Users.Api** — регистрация / логин / refresh / logout, JWT access + refresh-токены с ротацией и revoke.
-- **Finance.Api** — справочник валют, избранное пользователя, персональные курсы.
-- **Gateway** — YARP reverse-proxy с JWT-валидацией и Swagger UI (два документа: Users + Finance, без общего merge JSON).
+- **Finance.Api** — справочник валют, избранное пользователя.
+- **Gateway** — YARP reverse-proxy с JWT-валидацией и Swagger UI.
 
-HTTP-сервисы **Users.Api**, **Finance.Api** и **Gateway** реализованы на **ASP.NET Core Minimal API** (маршруты через `Map*` / группы endpoint'ов, без MVC-контроллеров).
+HTTP-сервисы **Users.Api** и **Finance.Api** реализованы на **ASP.NET Core Minimal API**.
 
 ## Требования
 
