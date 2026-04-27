@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <RootNamespace>TrueCodeTest.Finance.Api</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Swashbuckle.AspNetCore" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shared\TrueCodeTest.Shared.Kernel\TrueCodeTest.Shared.Kernel.csproj" />
+    <ProjectReference Include="..\..\Shared\TrueCodeTest.Shared.Web\TrueCodeTest.Shared.Web.csproj" />
+    <ProjectReference Include="..\..\Shared\TrueCodeTest.Shared.Auth\TrueCodeTest.Shared.Auth.csproj" />
+    <ProjectReference Include="..\TrueCodeTest.Finance.Application\TrueCodeTest.Finance.Application.csproj" />
+    <ProjectReference Include="..\TrueCodeTest.Finance.Contracts\TrueCodeTest.Finance.Contracts.csproj" />
+    <ProjectReference Include="..\TrueCodeTest.Finance.Mappers\TrueCodeTest.Finance.Mappers.csproj" />
+    <ProjectReference Include="..\TrueCodeTest.Finance.Infrastructure\TrueCodeTest.Finance.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

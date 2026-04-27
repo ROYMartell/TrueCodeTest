@@ -1,0 +1,8 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\TrueCodeTest.Finance.Domain\TrueCodeTest.Finance.Domain.csproj" />
+    <ProjectReference Include="..\TrueCodeTest.Finance.Contracts\TrueCodeTest.Finance.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

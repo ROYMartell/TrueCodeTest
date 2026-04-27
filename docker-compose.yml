@@ -1,0 +1,110 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: truecode-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./deploy/docker/init-db.sql:/docker-entrypoint-initdb.d/10-init-db.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  migrator:
+    build:
+      context: .
+      dockerfile: deploy/docker/migrator.Dockerfile
+    container_name: truecode-migrator
+    environment:
+      ConnectionStrings__UsersDb: "Host=postgres;Port=5432;Database=users_db;Username=postgres;Password=postgres"
+      ConnectionStrings__FinanceDb: "Host=postgres;Port=5432;Database=finance_db;Username=postgres;Password=postgres"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+
+  currency-fetcher:
+    build:
+      context: .
+      dockerfile: deploy/docker/currency-fetcher.Dockerfile
+    container_name: truecode-currency-fetcher
+    environment:
+      ConnectionStrings__FinanceDb: "Host=postgres;Port=5432;Database=finance_db;Username=postgres;Password=postgres"
+      CurrencyFetcher__IntervalSeconds: "3600"
+      CurrencyFetcher__SourceUrl: "http://www.cbr.ru/scripts/XML_daily.asp"
+      CurrencyFetcher__StartupDelaySeconds: "5"
+    depends_on:
+      migrator:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  users-api:
+    build:
+      context: .
+      dockerfile: deploy/docker/users.Dockerfile
+    container_name: truecode-users-api
+    environment:
+      ConnectionStrings__UsersDb: "Host=postgres;Port=5432;Database=users_db;Username=postgres;Password=postgres"
+      Jwt__Issuer: "truecode.users"
+      Jwt__Audience: "truecode.clients"
+      Jwt__SigningKey: "${JWT_SIGNING_KEY:-please-change-this-signing-key-32bytes-min}"
+      Jwt__AccessTtlMinutes: "15"
+      Jwt__RefreshTtlDays: "7"
+      ASPNETCORE_ENVIRONMENT: "Development"
+    ports:
+      - "5101:8080"
+    depends_on:
+      migrator:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  finance-api:
+    build:
+      context: .
+      dockerfile: deploy/docker/finance.Dockerfile
+    container_name: truecode-finance-api
+    environment:
+      ConnectionStrings__FinanceDb: "Host=postgres;Port=5432;Database=finance_db;Username=postgres;Password=postgres"
+      Jwt__Issuer: "truecode.users"
+      Jwt__Audience: "truecode.clients"
+      Jwt__SigningKey: "${JWT_SIGNING_KEY:-please-change-this-signing-key-32bytes-min}"
+      Jwt__AccessTtlMinutes: "15"
+      Jwt__RefreshTtlDays: "7"
+      ASPNETCORE_ENVIRONMENT: "Development"
+    ports:
+      - "5102:8080"
+    depends_on:
+      migrator:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  gateway:
+    build:
+      context: .
+      dockerfile: deploy/docker/gateway.Dockerfile
+    container_name: truecode-gateway
+    environment:
+      Jwt__Issuer: "truecode.users"
+      Jwt__Audience: "truecode.clients"
+      Jwt__SigningKey: "${JWT_SIGNING_KEY:-please-change-this-signing-key-32bytes-min}"
+      ReverseProxy__Clusters__users__Destinations__primary__Address: "http://users-api:8080/"
+      ReverseProxy__Clusters__finance__Destinations__primary__Address: "http://finance-api:8080/"
+      ASPNETCORE_ENVIRONMENT: "Development"
+    ports:
+      - "5100:8080"
+    depends_on:
+      - users-api
+      - finance-api
+    restart: unless-stopped
+
+volumes:
+  postgres-data:

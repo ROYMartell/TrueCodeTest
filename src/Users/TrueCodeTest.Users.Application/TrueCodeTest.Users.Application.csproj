@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" />
+    <PackageReference Include="FluentValidation" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shared\TrueCodeTest.Shared.Kernel\TrueCodeTest.Shared.Kernel.csproj" />
+    <ProjectReference Include="..\..\Shared\TrueCodeTest.Shared.Mediator\TrueCodeTest.Shared.Mediator.csproj" />
+    <ProjectReference Include="..\..\Shared\TrueCodeTest.Shared.Auth\TrueCodeTest.Shared.Auth.csproj" />
+    <ProjectReference Include="..\TrueCodeTest.Users.Domain\TrueCodeTest.Users.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

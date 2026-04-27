@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="coverlet.collector" />
+    <PackageReference Include="Moq" />
+    <PackageReference Include="FluentAssertions" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Users\TrueCodeTest.Users.Application\TrueCodeTest.Users.Application.csproj" />
+    <ProjectReference Include="..\..\src\Users\TrueCodeTest.Users.Domain\TrueCodeTest.Users.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Users\TrueCodeTest.Users.Infrastructure\TrueCodeTest.Users.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Users\TrueCodeTest.Users.Mappers\TrueCodeTest.Users.Mappers.csproj" />
+    <ProjectReference Include="..\..\src\Users\TrueCodeTest.Users.Contracts\TrueCodeTest.Users.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\Shared\TrueCodeTest.Shared.Kernel\TrueCodeTest.Shared.Kernel.csproj" />
+    <ProjectReference Include="..\..\src\Shared\TrueCodeTest.Shared.Auth\TrueCodeTest.Shared.Auth.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+</Project>

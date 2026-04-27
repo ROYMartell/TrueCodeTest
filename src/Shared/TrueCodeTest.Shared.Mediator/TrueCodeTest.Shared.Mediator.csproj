@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" />
+    <PackageReference Include="MediatR" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TrueCodeTest.Shared.Kernel\TrueCodeTest.Shared.Kernel.csproj" />
+  </ItemGroup>
+
+</Project>
